@@ -31,9 +31,8 @@ const MintButton = () => {
 
     const connect = async () => {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const account = accounts[0];
-        dispatch(setAccount(account));
-        // window.location.reload();
+        const account0 = accounts[0];
+        dispatch(setAccount(account0));
     }
 
     const mint = async () => {
@@ -55,6 +54,7 @@ const MintButton = () => {
         DegenDinozContract.on(DegenDinozContract.filters.Transfer(null, account, null), () => {
             setLoading(false);
             setSuccess(true);
+            getTotalMinted();
         })
     }
 
@@ -78,7 +78,10 @@ const MintButton = () => {
             <div>
             {
                 loading ?
-                    <CircularProgress size='15vw' color='primary'/>
+                    <div style={{display: 'inline'}}>
+                        <div style={{marginBottom: '2vw'}}><Typography sx={{marginBottom: '2vw', color: 'white', fontFamily: 'TroglodyteNF'}} variant='p'>Transaction being sent to blockchain, please allow up to 10 minutes to complete</Typography></div>
+                        <div><CircularProgress size='15vw' color='primary'/></div>
+                    </div>
                     :
                     account ? 
                         <Button disabled={checkDisabled()} onClick={mint} sx={{width: '20vw', height: '5vw', fontSize: '3vw', fontFamily: 'TroglodyteNF'}} color='primary' variant='contained' size='large'>Mint</Button>
